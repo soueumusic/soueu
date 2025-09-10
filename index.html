@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Soueu</title>
+<link rel="icon" type="image/png" href="src/img/favicon.png">
+
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" />
+<link rel="stylesheet" href="src/fonts/gambetta.css">
+
+<style>
+:root { --transition: 360ms ease; }
+
+html, body { 
+  height:100%; margin:0; font-family:'Gambetta-Medium', serif; 
+  background:#000; overflow-x: hidden;
+}
+
+.bg-wrap { position:fixed; inset:0; z-index:1; overflow:hidden; }
+.bg-wrap img { width:100%; height:100%; object-fit:cover; transition: filter var(--transition), transform var(--transition); transform:scale(1.02); }
+.bg-blur img { filter: blur(6px) brightness(0.9); transform:scale(1.06); }
+
+#instagram-button { 
+  position: fixed; right:25px; bottom:25px; z-index:30; 
+  width:25px; height:25px; display:flex; align-items:center; justify-content:center; 
+  color:#fff; font-size:25px; 
+  transition: transform var(--transition); 
+}
+#instagram-button:hover { transform: scale(1.12); }
+
+/* Logo */
+.site-logo { 
+  position:absolute; 
+  left:50%; 
+  transform:translateX(-50%); 
+  max-width:250px; 
+  z-index:25; 
+  transition: top var(--transition), transform var(--transition), width var(--transition); 
+  pointer-events:none; 
+}
+
+/* Stage */
+.stage {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;     
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  padding-left: 315px;
+  z-index: 5; /* acima do fundo */
+}
+
+/* Imagem principal */
+.main-card { 
+  width: 450px; max-width: 80vw; aspect-ratio:1/1; 
+  border-radius:25px; overflow:hidden; 
+  background:#111; box-shadow:0 12px 30px rgba(0,0,0,.45); 
+  cursor:pointer; transition: transform var(--transition), box-shadow var(--transition); 
+  z-index: 2; 
+  flex-shrink: 0;
+}
+.main-card img { width:100%; height:100%; object-fit:cover; display:block; }
+.main-card:hover { transform: scale(1.03); box-shadow:0 16px 40px rgba(0,0,0,.55); }
+
+/* Container botões */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: calc(315px + 450px + 20px);
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+/* Botões */
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 220px;
+  height: 50px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: #fff;
+  color: #000;
+  text-decoration: none;
+  font-size: 15px;
+  box-shadow: 0 6px 14px rgba(0,0,0,.25);
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: all 0.4s ease, transform var(--transition);
+}
+
+.action-btn i, .action-btn svg, .action-btn img { 
+  width:18px; height:18px; font-size:18px; margin-right:8px; 
+}
+.action-btn.show { opacity: 1; transform: translateX(0); }
+.action-btn:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,.35); }
+
+/* ============================
+   MOBILE (até 768px)
+   ============================ */
+@media(max-width:768px){
+  html, body { overflow-y: auto; } /* rolagem apenas do conteúdo */
+  
+  .stage { 
+    flex-direction: column; 
+    justify-content: flex-start; 
+    align-items: center; 
+    padding-left: 0; 
+    padding-top: 100px; 
+    min-height: 100vh;
+  }
+
+  .site-logo { 
+    max-width: 140px; 
+  }
+
+  .main-card { 
+    width: 85vw; max-width: 350px; 
+    aspect-ratio: 1/1; /* sempre quadrado */
+  }
+
+  .actions { 
+    position: static; 
+    margin-top: 25px; 
+    transform: none; 
+    align-items: center; 
+    width: 100%;
+  }
+
+  .action-btn { 
+    width: 85vw; max-width: 420px; 
+    height: 55px; /* mais fácil de clicar */
+    font-size: 16px; 
+    justify-content: center; 
+    transform: translateY(20px); 
+  }
+  .action-btn span { white-space: nowrap; }
+  .action-btn.show { transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<div class="bg-wrap" id="bg">
+  <img src="src/img/fundo - 01.tvc.png" alt="Fundo">
+</div>
+
+<a id="instagram-button" href="https://www.instagram.com/soueumusic/" target="_blank" rel="noopener" aria-label="Instagram">
+  <i class="fa-brands fa-instagram"></i>
+</a>
+
+<img src="src/img/logo.png" alt="Logo" class="site-logo" id="siteLogo">
+
+<main class="stage" id="stage">
+  <!-- Imagem principal -->
+  <button class="main-card" id="mainButton" aria-expanded="false" aria-controls="actions">
+    <img src="src/img/tvc.png" alt="Imagem principal">
+  </button>
+
+  <!-- Botões -->
+  <nav class="actions" id="actions" aria-hidden="true" role="navigation">
+    <a class="action-btn" href="#" data-href="COLE O LINK DO YOUTUBE AQUI"><i class="fa-brands fa-youtube"></i><span>Assista no YouTube</span></a>
+    <a class="action-btn" href="#" data-href="https://open.spotify.com/intl-pt/track/3agRUofeaJEPoWzRs5o8k5?si=6d54db1a66bb4d22"><i class="fa-brands fa-spotify"></i><span>Ouça no Spotify</span></a>
+    <a class="action-btn" href="#" data-href="https://music.youtube.com/watch?v=-aFEg1ycn1k&si=HS-7nFu96HLvN4L6">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="18" width="18">
+        <path fill="#000" fill-rule="evenodd" d="M23 12c0 6.075 -4.925 11 -11 11S1 18.075 1 12 5.925 1 12 1s11 4.925 11 11ZM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0 -10Zm-6 5a6 6 0 1 1 12 0 6 6 0 0 1 -12 0Zm9 0 -5 -3v6l5 -3Z" clip-rule="evenodd"/>
+      </svg>
+      <span>Ouça no YouTube Music</span>
+    </a>
+    <a class="action-btn" href="#" data-href="https://music.apple.com/pt/song/te-vi-chegar/1836735044"><i class="fa-brands fa-apple"></i><span>Ouça no Apple Music</span></a>
+    <a class="action-btn" href="#" data-href="https://link.deezer.com/s/3108ob8bBgYdI0Nf5BZWR"><img src="src/img/deezer.png" alt="Deezer" style="height:18px;width:18px;"><span>Ouça no Deezer</span></a>
+    <a class="action-btn" href="#" data-href="https://music.amazon.com/tracks/B0FPBL5H4D"><i class="fa-brands fa-amazon"></i><span>Ouça no Amazon Music</span></a>
+  </nav>
+</main>
+
+<script>
+(function(){
+  const mainButton = document.getElementById('mainButton');
+  const actions = document.getElementById('actions');
+  const bg = document.getElementById('bg');
+  const siteLogo = document.getElementById('siteLogo');
+  const actionButtons = Array.from(document.querySelectorAll('.action-btn'));
+  let isOpen=false;
+
+  function positionLogo(){
+    if(!siteLogo || !mainButton) return;
+    const rect = mainButton.getBoundingClientRect();
+    const mid = rect.top / 2;
+    const logoHeight = siteLogo.offsetHeight || 48;
+    siteLogo.style.top = `${Math.max(8, Math.round(mid - logoHeight / 2))}px`;
+  }
+
+  function openPanel(){
+    if(isOpen) return;
+    isOpen=true;
+    bg.classList.add('bg-blur');
+    mainButton.setAttribute('aria-expanded','true');
+    actions.style.opacity = 1;
+    actions.style.pointerEvents = 'auto';
+    actionButtons.forEach((btn,i)=>{ setTimeout(()=> btn.classList.add('show'), i*100); });
+
+    // 📱 Auto scroll no mobile
+    if(window.innerWidth <= 768){
+      setTimeout(()=>{
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+      }, actionButtons.length * 120); // espera botões terminarem de animar
+    }
+  }
+
+  function closePanel(){
+    if(!isOpen) return;
+    isOpen=false;
+    bg.classList.remove('bg-blur');
+    mainButton.setAttribute('aria-expanded','false');
+    actionButtons.forEach(btn=> btn.classList.remove('show'));
+    setTimeout(()=> {
+      actions.style.opacity = 0;
+      actions.style.pointerEvents = 'none';
+    }, 300);
+  }
+
+  mainButton.addEventListener('click', e=>{ e.stopPropagation(); isOpen?closePanel():openPanel(); });
+  document.addEventListener('click', e=>{ if(isOpen && !mainButton.contains(e.target) && !actions.contains(e.target)){ closePanel(); } });
+  actions.addEventListener('click', e=>{ 
+    e.stopPropagation();
+    const a = e.target.closest('a.action-btn');
+    if(a){ 
+      const href = a.getAttribute('data-href'); 
+      if(/^https?:\/\//i.test(href)){ window.open(href,'_blank','noopener'); } else e.preventDefault(); 
+    }
+  });
+
+  window.addEventListener('resize', positionLogo);
+  window.addEventListener('load',()=>setTimeout(positionLogo,30));
+})();
+</script>
+
+</body>
+</html>
