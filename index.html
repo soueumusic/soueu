@@ -18,10 +18,12 @@ html, body {
   background:#000; 
 }
 
+/* Fundo sempre fixo */
 .bg-wrap { position:fixed; inset:0; z-index:1; overflow:hidden; }
 .bg-wrap img { width:100%; height:100%; object-fit:cover; transition: filter var(--transition), transform var(--transition); transform:scale(1.02); }
 .bg-blur img { filter: blur(6px) brightness(0.9); transform:scale(1.06); }
 
+/* Botão Instagram */
 #instagram-button { 
   position: fixed; right:25px; bottom:25px; z-index:30; 
   width:25px; height:25px; display:flex; align-items:center; justify-content:center; 
@@ -51,6 +53,7 @@ html, body {
   position: relative;
   padding-left: 315px;
   overflow: hidden;
+  z-index: 5; /* acima do fundo */
 }
 
 /* Imagem principal */
@@ -97,7 +100,6 @@ html, body {
   transform: translateX(-50px);
   transition: all 0.4s ease, transform var(--transition);
 }
-
 .action-btn i, .action-btn svg, .action-btn img { 
   width:18px; height:18px; font-size:18px; margin-right:8px; 
 }
@@ -109,7 +111,7 @@ html, body {
    ============================ */
 @media(max-width:768px){
   html, body { overflow-y: auto; } /* permite rolagem */
-  
+
   .stage { 
     flex-direction: column; 
     justify-content: flex-start; 
@@ -134,17 +136,27 @@ html, body {
     transform: none; 
     align-items: center; 
     width: 100%;
+    margin-bottom: 80px; /* espaço pro instagram */
   }
 
   .action-btn { 
     width: 85vw; max-width: 420px; 
-    height: 55px; /* mais fácil de clicar */
+    height: 55px; 
     font-size: 16px; 
     justify-content: center; 
     transform: translateY(20px); 
   }
   .action-btn span { white-space: nowrap; }
   .action-btn.show { transform: translateY(0); }
+
+  /* Instagram desce abaixo dos botões */
+  #instagram-button { 
+    position: static; 
+    margin: 25px auto; 
+    width: 30px; 
+    height: 30px; 
+    font-size: 30px; 
+  }
 }
 </style>
 </head>
@@ -153,10 +165,6 @@ html, body {
 <div class="bg-wrap" id="bg">
   <img src="src/img/fundo - 01.tvc.png" alt="Fundo">
 </div>
-
-<a id="instagram-button" href="https://www.instagram.com/soueumusic/" target="_blank" rel="noopener" aria-label="Instagram">
-  <i class="fa-brands fa-instagram"></i>
-</a>
 
 <img src="src/img/logo.png" alt="Logo" class="site-logo" id="siteLogo">
 
@@ -180,6 +188,11 @@ html, body {
     <a class="action-btn" href="#" data-href="https://link.deezer.com/s/3108ob8bBgYdI0Nf5BZWR"><img src="src/img/deezer.png" alt="Deezer" style="height:18px;width:18px;"><span>Ouça no Deezer</span></a>
     <a class="action-btn" href="#" data-href="https://music.amazon.com/tracks/B0FPBL5H4D"><i class="fa-brands fa-amazon"></i><span>Ouça no Amazon Music</span></a>
   </nav>
+
+  <!-- Instagram entra no fluxo no mobile -->
+  <a id="instagram-button" href="https://www.instagram.com/soueumusic/" target="_blank" rel="noopener" aria-label="Instagram">
+    <i class="fa-brands fa-instagram"></i>
+  </a>
 </main>
 
 <script>
@@ -194,7 +207,7 @@ html, body {
   function positionLogo(){
     if(!siteLogo || !mainButton) return;
     const rect = mainButton.getBoundingClientRect();
-    const mid = rect.top / 2;
+    const mid = rect.top / 2 + window.scrollY; // leva em conta a rolagem
     const logoHeight = siteLogo.offsetHeight || 48;
     siteLogo.style.top = `${Math.max(8, Math.round(mid - logoHeight / 2))}px`;
   }
@@ -233,6 +246,7 @@ html, body {
   });
 
   window.addEventListener('resize', positionLogo);
+  window.addEventListener('scroll', positionLogo); // atualiza ao rolar
   window.addEventListener('load',()=>setTimeout(positionLogo,30));
 })();
 </script>
